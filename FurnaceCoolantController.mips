@@ -1,0 +1,42 @@
+# Furnace Coolant Controller
+alias CoolantSwitch d0
+alias CoolantValve d1
+alias CoolantTank d2
+alias CoolantInput d3
+alias CoolantLight d4
+
+start:
+l r0 CoolantTank Temperature
+move r1 1
+bgt r0 295 red
+bgt r0 250 yellow
+bgt r0 150 green
+continue:
+s CoolantLight Color r1
+
+l r0 CoolantSwitch Setting
+bgtz r0 cooling
+j cutoff
+
+cooling:
+bgt 295 r0 cutoff
+s CoolantValve On 1
+s CoolantInput On 0
+j start
+
+cutoff:
+s CoolantValve On 0
+s CoolantInput On 1
+j start
+
+green: 
+move r1 2
+j continue
+
+yellow: 
+move r1 5
+j continue
+
+red:
+move r1 4
+j continue
